@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Book List</title>
+  <style>
+    table {
+      border: 1px solid #000;
+    }
+
+    th, td {
+      border: 1px dotted #555;
+    }
+  </style>
+</head>
+<body>
+<span th:if="${keyword}">
+  Search result for <code>"[[${keyword}]]"</code>, <a th:href="@{/books}">click here to clear</a>.<br>
+</span>
+<!--There are [[${books.totalElements}]] customer(s).-->
+<form action="/return">
+  <label>
+    Ma muon sach:
+    <input type="text" name="search">
+  </label>
+  <input type="submit" value="Tra sach">
+</form>
+<table>
+  <caption>Books List</caption>
+  <thead>
+  <tr>
+    <th>Id</th>
+    <th>Name</th>
+    <th>Quantity</th>
+  </tr>
+  </thead>
+  <tbody>
+  <tr th:each="c : ${books}">
+    <td th:text="${c.id}"></td>
+    <td>
+      <a th:href="@{/book/{id}(id=${c.id})}" th:text="${c.name}"></a>
+    </td>
+    <td th:text="${c.quantity}"></td>
+  </tr>
+  </tbody>
+</table>
+<div>
+  <a th:if="${books.hasPrevious()}"
+     th:href="@{'/book'(page=${books.number - 1}, size=${books.size}, s=${keyword})}">
+    Previous
+  </a>
+  [[${books.number + 1}]]/[[${books.totalPages}]]
+  <a th:if="${books.hasNext()}"
+     th:href="@{'/book'(page=${books.number + 1}, size=${books.size}, s=${keyword})}">
+    Next
+  </a>
+</div>
+</body>
+</html>
